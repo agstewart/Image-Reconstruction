@@ -1,0 +1,21 @@
+classdef ann_gamma
+    %   Class containing properties of a pair of annihilation gammas
+    %   Detailed explanation goes here
+    
+    properties (Constant)
+        R = 1;
+        origin = [0,0]; % origin of gamma pair
+        rand_theta = rand(1);
+    end
+        
+    properties (Dependent) 
+        x_coor = cos(degtorad(rand_theta*360)); % randomly generate angle of direction 
+        y_coor = sin(degtorad(rand_theta*360)); 
+    end
+    
+    methods
+        function x_coor = get.x_coor(obj)
+    end
+    
+end
+

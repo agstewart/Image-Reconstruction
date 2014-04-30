@@ -1,0 +1,44 @@
+
+
+%% First Steps in Image Reconstruction
+%Andrew Stewart
+%University of Glasgow
+%11th October 2013
+
+close('all')
+clear('all')
+
+%% Define Image
+Image = zeros(100,100);
+% Image(25:75, 25:75) = 1; % a square
+Image(50, 50) = 1;
+
+%% Plot Image 
+figure('color','white'); subplot(221);
+contour(Image,1)
+xlabel('x'); ylabel('y')
+
+%% Perform Radon Transform
+
+[R, xp] = radon(Image,[0 45]); % computes Radon Transform at 0 and 45 degrees
+
+%Plot transform
+subplot(222)
+plot(R(:,1),xp); title('R_{0^o} (x\prime)');
+subplot(223)
+plot(xp,R(:,2)); title('R_{45^o} (x\prime)');
+
+%% Radon Transform as an Image
+
+subplot(224)
+theta = 0:179;
+[R,xp] = radon(Image,theta); 
+imagesc(theta,xp,R); title('Sinogram (Radon Transform)')
+colormap(hot)
+
+%% Inverse Radon Transform
+
+figure('color','white'); figure(2);
+I = iradon(R, theta);
+contour(Image, 1)
+

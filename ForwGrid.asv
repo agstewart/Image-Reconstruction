@@ -1,0 +1,37 @@
+classdef ForwGrid
+    %ForwGrid: Generates pixel grid 
+    %   Detailed explanation goes here
+    
+    properties (Constant)
+%         xstep = 0.1;
+%         ystep = 0.1;
+    end
+    
+    properties
+        xstep;
+        ystep
+        x;
+        y;
+        x2;
+        y2;
+    end
+    
+    methods
+        % Class constructor
+        function obj = ForwGrid(xStep, yStep)
+            obj.xstep = xStep;
+            obj.ystep =
+            obj.x = 0:obj.xstep:5;
+            obj.y = 0:obj.ystep:5;
+            k = [-1*obj.xstep, obj.xstep, obj.xstep, -1*obj.xstep]; 
+            [X Y] = meshgrid(k, obj.x);
+            obj.x2 = X + Y; 
+
+            h = [-1*obj.ystep, -1*obj.ystep, obj.ystep, obj.ystep];
+            [X2 Y2] = meshgrid(h, obj.y);
+            obj.y2 = X2 + Y2;
+        end
+    end
+    
+end
+

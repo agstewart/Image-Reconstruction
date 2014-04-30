@@ -1,0 +1,75 @@
+
+%%% Image Rotation and the Radon Transform
+
+close('all');
+clear('all')
+
+%% Define Image
+Image = zeros(100,100);
+Image(25:75, 25:75) = 1; % a square
+%Image(50, 50) = 1;
+
+theta = 0:2:180;
+
+figure('color','white'); figure(1);
+
+radon_sino = zeros(145, length(theta));
+linesum_sino = zeros(100, length(theta));
+
+%% Rotate Image
+for i = 1:length(theta)
+    subplot(223)
+    img_rot = imrotate(Image, theta(i), 'bilinear', 'crop'); % Rotate the original image
+    % Use bilinear  interpolation, otherwise we see some higher frequency
+    % effects
+    contour(img_rot,1) % plot rotated image
+    ylim([0, 110]); % fix y axis
+    xlim([0, 110]); % fix x axis
+    
+    subplot(221)
+    hold on 
+    [R, xp] = radon(Image,theta(i)); % computes Radon Transform
+    % Note radon transform finds centre of the image
+    radon_sino(:,i) = R; % Build Sinogram
+    plot(xp, R); 
+    title('Radon Transform')
+    
+    subplot(224)
+    hold on
+    linesum_sino(:,i) = sum(img_rot,1); % Build Sinogram
+    plot(1:length(Image), sum(img_rot,1))
+    title('Line Sum')
+    
+end
+
+figure('color', 'white'); figure(2);
+subplot(121)
+imagesc(theta,xp,radon_sino); title('Sinogram (Radon Transform)')
+colormap(hot)
+xlabel('Theta')
+ylabel('x-axis value')
+
+subplot(122)
+imagesc(theta,1:100,linesum_sino)
+xlabel('Theta')
+title('Sinogram (Line Sum)')
+
+%% Back Projection (unfiltered)
+
+BP = zeros(size(linesum_sino)); %Array for Back Projection values
+
+figure('color','white'); figure(3);
+hold on;
+
+for j = 1:2%length(theta)
+    BP(:,j) = linesum_sino(:,j);
+%     u1 = 1:length(BP);
+%     v1 = 1:length(BP); 
+%     x1 = u1*cos(theta(j)) - v1*sin(theta(j));
+%     y1 = v1*cos(theta(j)) + u1*sin(theta(j));
+    plot(1:length(BP),BP(:,j))
+end
+
+% contour(BP,1);
+% xlim([-10, 110])
+
